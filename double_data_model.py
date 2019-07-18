@@ -4,7 +4,7 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.naive_bayes import GaussianNB
 import create_models
 
-X, Y = create_models.get_data_for_double_time(mode='data')
+X, Y = create_models.get_data_for_double_time(mode='evaluacija')
 
 seed = 7
 models = []
@@ -14,18 +14,40 @@ models.append(('DT Regr.', DecisionTreeRegressor()))
 
 results = []
 names = []
+print("Original data, sa suhim,1/3+2/3")
 for name, model in models:
-    kfold = model_selection.KFold(n_splits=len(models), random_state=seed)
+    kfold = model_selection.KFold(n_splits=3, random_state=seed)
     cv_results = model_selection.cross_val_score(model, X, Y, cv=kfold, scoring='accuracy')
     results.append(cv_results)
     names.append(name)
     print('{}: mean {} std({})'.format(name,
-                                       cv_results.mean(),
-                                       cv_results.std()))
+                               cv_results.mean(),
+                               cv_results.std()))
 
 fig = plt.figure('Orginal data')
 fig.suptitle('Usporedba rezultata dobivenih za podatke koristeci 2 uzastopna vremena mjerenja')
 ax = fig.add_subplot(111)
 plt.boxplot(results)
+ax.set_xticklabels(names)
+plt.show()
+
+X, Y = create_models.get_data_for_double_time(mode='evaluacija')
+
+results2 = []
+names = []
+print("Original data, sa suhim,leave one out")
+for name, model in models:
+    kfold = model_selection.KFold(n_splits=len(X), random_state=seed)
+    cv_results = model_selection.cross_val_score(model, X, Y, cv=kfold, scoring='accuracy')
+    results2.append(cv_results)
+    names.append(name)
+    print('{}: mean {} std({})'.format(name,
+                               cv_results.mean(),
+                               cv_results.std()))
+
+fig = plt.figure('Orginal data-leave one out')
+fig.suptitle('Usporedba rezultata dobivenih za podatke koristeci 2 uzastopna vremena mjerenja')
+ax = fig.add_subplot(111)
+plt.boxplot(results2)
 ax.set_xticklabels(names)
 plt.show()

@@ -1,10 +1,17 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jul 15 14:14:35 2019
+
+@author: Petra
+"""
+
 import matplotlib.pyplot as plt
 from sklearn import model_selection
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.naive_bayes import GaussianNB
 import create_models
 
-X, Y= create_models.get_data_with_salinity(mode='evaluacija')
+X, Y= create_models.get_data_with_salinity(mode='evaluacija-suhi')
 
 seed = 7
 models = []
@@ -24,7 +31,7 @@ for name, model in models:
                                cv_results.std()))
 
 fig = plt.figure()
-fig.suptitle('Usporedba rezultata dobivenih za podatke s ukljucenom slanocom,1/3+2/3')
+fig.suptitle('Usporedba rezultata dobivenih za podatke s ukljucenom slanocom,1/3+2/3,suhi')
 ax = fig.add_subplot(111)
 plt.boxplot(results)
 ax.set_xticklabels(names)
@@ -41,7 +48,7 @@ for name, model in models:
                                cv_results.std()))
 
 fig = plt.figure()
-fig.suptitle('Usporedba rezultata dobivenih za podatke s ukljucenom slanocom,leave one out')
+fig.suptitle('Usporedba rezultata dobivenih za podatke s ukljucenom slanocom,leave one out,suhi')
 ax = fig.add_subplot(111)
 plt.boxplot(results2)
 ax.set_xticklabels(names)

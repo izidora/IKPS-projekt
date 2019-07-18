@@ -1,7 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jul 16 02:59:14 2019
+
+@author: Petra
+"""
+
 import pandas as pd
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 import numpy as np
+
 
 def get_data_with_salinity(mode):
     """
@@ -22,18 +30,18 @@ def get_data_with_salinity(mode):
     salinity_bin_result = []
     salinity_result = []
     #bez suhih dana
-    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-bez suhih')
-
+    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-bez suhih prosjek')
+    
     for i in data.index:
-        data_with_salinity.append([data['Suncevo zracenje'][i], data['Padaline 72h'][i], data['Salinitet'][i]])
-        salinity_bin_result.append(data['Zagadenost binarno'][i])
-        salinity_result.append(data['Zagadenost'][i])
-
+        data_with_salinity.append([data['Sunce zracenje cijeli'][i], data['Padaline 72h'][i], data['Salinitet'][i]])
+        salinity_bin_result.append(data['Zagadenost binarno cijeli'][i])
+        salinity_result.append(data['Zagadenost cijeli'][i])
+    
     X = data_with_salinity[:int(2*len(data_with_salinity)/3)]
     Y = salinity_result[:int(2*len(data_with_salinity)/3)]
     
     Y_bin = salinity_bin_result[:int(2*len(data_with_salinity)/3)]
-
+    
     
     predict_data = data_with_salinity[2*int(len(data_with_salinity)/3)+1:]
     result_data = salinity_result[2*int(len(data_with_salinity)/3)+1:]  
@@ -51,19 +59,19 @@ def get_data_with_salinity(mode):
     salinity_bin_result2 = []
     salinity_result2 = []
     
-    data2 = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-suhi')
-
+    data2 = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-suhi prosjek')
+    
     for i in data2.index:
         #print(i)
-        data_with_salinity2.append([data2['Suncevo zracenje'][i], data2['Padaline 72h'][i], data2['Salinitet'][i]])
-        salinity_bin_result2.append(data2['Zagadenost binarno'][i])
-        salinity_result2.append(data2['Zagadenost'][i])
-
+        data_with_salinity2.append([data2['Sunce zracenje cijeli'][i], data2['Padaline 72h'][i], data2['Salinitet'][i]])
+        salinity_bin_result2.append(data2['Zagadenost binarno cijeli'][i])
+        salinity_result2.append(data2['Zagadenost cijeli'][i])
+    
     X2 = data_with_salinity2[:int(2*len(data_with_salinity2)/3)]
     Y2 = salinity_result2[:int(2*len(data_with_salinity2)/3)]
     
     Y2_bin = salinity_bin_result2[:int(2*len(data_with_salinity2)/3)]
-
+    
     
     predict_data2 = data_with_salinity2[2*int(len(data_with_salinity2)/3)+1:]
     result_data2 = salinity_result2[2*int(len(data_with_salinity2)/3)+1:]  
@@ -121,12 +129,12 @@ def get_data_with_salinity_leave_one(mode):
     salinity_bin_result = []
     salinity_result = []
     #bez suhih dana
-    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-bez suhih')
+    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-bez suhih prosjek')
 
     for i in data.index:
-        data_with_salinity.append([data['Suncevo zracenje'][i], data['Padaline 72h'][i], data['Salinitet'][i]])
-        salinity_bin_result.append(data['Zagadenost binarno'][i])
-        salinity_result.append(data['Zagadenost'][i])
+        data_with_salinity.append([data['Sunce zracenje cijeli'][i], data['Padaline 72h'][i], data['Salinitet'][i]])
+        salinity_bin_result.append(data['Zagadenost binarno cijeli'][i])
+        salinity_result.append(data['Zagadenost cijeli'][i])
 
     X=np.empty(shape=(len(data_with_salinity),3))
     Y=np.empty(shape=(len(salinity_result),1))
@@ -146,13 +154,13 @@ def get_data_with_salinity_leave_one(mode):
     salinity_bin_result2 = []
     salinity_result2 = []
     
-    data2 = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-suhi')
+    data2 = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Slanoca-suhi prosjek')
 
     for i in data2.index:
         #print(i)
-        data_with_salinity2.append([data2['Suncevo zracenje'][i], data2['Padaline 72h'][i], data2['Salinitet'][i]])
-        salinity_bin_result2.append(data2['Zagadenost binarno'][i])
-        salinity_result2.append(data2['Zagadenost'][i])
+        data_with_salinity2.append([data2['Sunce zracenje cijeli'][i], data2['Padaline 72h'][i], data2['Salinitet'][i]])
+        salinity_bin_result2.append(data2['Zagadenost binarno cijeli'][i])
+        salinity_result2.append(data2['Zagadenost cijeli'][i])
         
     X2=np.empty(shape=(len(data_with_salinity2),3))
     Y2=np.empty(shape=(len(salinity_result2),1))
@@ -296,91 +304,6 @@ def get_data_with_salinity_leave_one(mode):
     elif mode =='bin_result':
         return Y_bin,Y_bin2
 
-def get_data_for_double_time(mode):
-    """
-        Extracting data for model that takes both measuring from 10AM and 2PM
-
-        mode:
-            'nb' for naive bayes result
-            'dtc' for decision tree classifier
-            'dtr' for decision tree regressor
-            'data' for returning dataset
-            'result' for result provided in excel
-            'result_bin' for result provided in excel as classes
-            'dtc_bin' for results as classes
-    """
-    data = pd.read_excel(io='Original_data.xlsx', sheet_name='podaci')
-    raw_data = []
-    for i in data.index:
-        if data['TOCKA'][i] == '3M' and data['VRIJEME'][i] in [10, 14]:
-            raw_data.append(
-                {
-                    'date': data['DATUM'][i],
-                    'time': data['VRIJEME'][i],
-                    'rain': data['KPad72'][i],
-                    'sun':  data['Sunce'][i],
-                    'zag': data['EC'][i]
-                }
-            )
-
-    double_time = []
-    double_time_result = []
-    double_time_result_bin = []
-    for num, data in enumerate(raw_data):
-        if num+1 != len(raw_data) and raw_data[num]['date'] == raw_data[num+1]['date']:
-            double_time.append([raw_data[num]['sun'], raw_data[num+1]['sun'], raw_data[num]['rain'], raw_data[num+1]['rain']])
-            double_time_result.append(raw_data[num+1]['zag'])
-            double_time_result_bin.append(
-                0 if raw_data[num+1]['zag'] < 300 else 1)
-
-    X = double_time[:int(2*len(double_time)/3)]
-    Y = double_time_result[:int(2*len(double_time)/3)]
-    
-    Y_bin = double_time_result_bin[:int(2*len(double_time)/3)]
-
-    
-    predict_data = double_time[2*int(len(double_time)/3+1):]
-    result_data = double_time_result[2*int(len(double_time)/3+1):]
-    
-    result_data_bin = double_time_result_bin[2*int(len(double_time)/3+1):]
-
-    if mode=='evaluacija':
-        return double_time,double_time_result
-    if mode=='evaluacija-bin':
-        return double_time,double_time_result_bin
-
-
-    if mode == 'data':
-        return double_time, double_time_result
-    elif mode == 'result':
-        return result_data
-    elif mode == 'result_bin':
-        return result_data_bin
-    # naive bayes
-
-
-    if mode == 'nb':
-        gaussian_nb_salinity = GaussianNB()
-        gaussian_prediction = gaussian_nb_salinity.fit(X, Y).predict(predict_data)
-        return gaussian_prediction
-
-    # decision tree regression
-    if mode == 'dtr':
-        regression_tree = DecisionTreeRegressor()
-        regression_tree_prediction = regression_tree.fit(X, Y).predict(predict_data)
-        return regression_tree_prediction
-
-    # decision tree classification
-    if mode == 'dtc':
-        classification_tree = DecisionTreeClassifier()
-        classification_tree_prediction = classification_tree.fit(X, Y).predict(predict_data)
-        return classification_tree_prediction
-    
-    if mode == 'dtc_bin':
-        classification_tree = DecisionTreeClassifier()
-        classification_tree_prediction_bin = classification_tree.fit(X, Y_bin).predict(predict_data)
-        return classification_tree_prediction_bin
-
 
 def get_data_for_original_leave_one(mode):
     """
@@ -393,30 +316,31 @@ def get_data_for_original_leave_one(mode):
             'data' for returning dataset
             'result' for result provided in excel
     """
-    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-bez suhi')
+    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-bez suhi prosjek')
     original_data = []
     original_data_result = []
     original_data_result_bin = []
     
     for i in data.index:
-        original_data.append([data['sunce'][i], data['padaline'][i]])
-        original_data_result.append(data['zag'][i])
-        original_data_result_bin.append(0 if data['zag'][i] < 300 else 1)
+        original_data.append([data['sunce cijeli'][i], data['padaline'][i]])
+        original_data_result.append(data['zag cijeli'][i])
+        original_data_result_bin.append(data['zag bin cijeli'][i])
     
     #sa suhim danima
-    data2= pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-suhi')
+    data2= pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-suhi prosjek')
     original_data2 = []
     original_data_result2 = []
     original_data_result_bin2 = []
     for i in data2.index:
-        original_data2.append([data2['sunce'][i], data2['padaline'][i]])
-        original_data_result2.append(data2['zag'][i])
-        original_data_result_bin2.append(0 if data2['zag'][i] < 300 else 1)
+        original_data2.append([data2['sunce cijeli'][i], data2['padaline'][i]])
+        original_data_result2.append(data2['zag cijeli'][i])
+        original_data_result_bin2.append(data2['zag bin cijeli'][i])
     
     X=np.empty(shape=(len(original_data),2))
     Y=np.empty(shape=(len(original_data_result),1))
     Y_bin=np.empty(shape=(len(original_data_result),1))
     
+    #print(original_data_result_bin)
     
     for i in range(len(original_data)):
         X[i][0]=original_data[i][0]
@@ -578,15 +502,15 @@ def get_data_for_original_model(mode):
             'dtc_bin' for results as classes
     """
     #otvaaramo za bez suhih dana, dobijemo sve i spremimo to zasebno i onda jos podijelimo na 1/3+2/3
-    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-bez suhi')
+    data = pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-bez suhi prosjek')
     original_data = []
     original_data_result = []
     original_data_result_bin = []
 
     for i in data.index:
-        original_data.append([data['sunce'][i], data['padaline'][i]])
-        original_data_result.append(data['zag'][i])
-        original_data_result_bin.append(0 if data['zag'][i] < 300 else 1)
+        original_data.append([data['sunce cijeli'][i], data['padaline'][i]])
+        original_data_result.append(data['zag cijeli'][i])
+        original_data_result_bin.append(data['zag bin cijeli'])
 
     X = original_data[:int(2*len(original_data)/3)]
     Y = original_data_result[:int(2*len(original_data)/3)]
@@ -605,16 +529,17 @@ def get_data_for_original_model(mode):
     if mode=="evaluacija-bin-bez":
         return original_data,original_data_result_bin
     #sa suhim danima
-    data2= pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-suhi')
+    data2= pd.read_excel(io='All_data(svi21.7).xlsx', sheet_name='Obicno-suhi prosjek')
     #print(data2)
     original_data2 = []
     original_data_result2 = []
     original_data_result_bin2 = []
     #print(data)
     for i in data2.index:
-        original_data2.append([data2['sunce'][i], data2['padaline'][i]])
-        original_data_result2.append(data2['zag'][i])
-        original_data_result_bin2.append(0 if data2['zag'][i] < 300 else 1)
+        original_data2.append([data2['sunce cijeli'][i], data2['padaline'][i]])
+        original_data_result2.append(data2['zag cijeli'][i])
+        original_data_result_bin2.append(data2['zag bin cijeli'])
+    
 
     X2 = original_data2[:int(2*len(original_data2)/3)]
     Y2 = original_data_result2[:int(2*len(original_data2)/3)]
@@ -675,6 +600,5 @@ def get_data_for_original_model(mode):
 if __name__ == '__main__':
     get_data_with_salinity_leave_one(mode='data')
     get_data_for_original_leave_one(mode='data')
-    get_data_for_double_time(mode='data')
     get_data_for_original_model(mode='data')
     get_data_with_salinity(mode='data')
